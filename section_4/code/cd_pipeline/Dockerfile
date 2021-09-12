@@ -3,6 +3,15 @@ FROM alpine:3.7
 
 # Install python 3 and pip
 RUN apk add --update python3
+###
+# add user jenkins 
+RUN useradd -d "$JENKINS_HOME" -u 102 -m -s /bin/bash jenkins 
+
+# Create docker group with gid = 497 and add jenkins to the group
+# This will allow the jenkins user to run docker commands
+RUN groupadd -g 497 docker && \
+    usermod -a -G docker jenkins
+####    
 
 # Install Python modules needed by the Python app
 COPY requirements.txt /usr/src/app/
